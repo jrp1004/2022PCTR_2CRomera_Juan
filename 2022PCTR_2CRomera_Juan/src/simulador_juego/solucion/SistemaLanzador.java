@@ -7,6 +7,9 @@ public class SistemaLanzador {
 
 	public static void main(String[] args) {
 		Juego juego=new Juego(numEnemigosPorTipo.length, MAXENEMIGOS);
+		for(int i=0;i<numEnemigosPorTipo.length;i++) {
+			new Thread(new GeneradorEnemigos(i, numEnemigosPorTipo[i], juego)).start();
+		}
 	}
 	
 }
