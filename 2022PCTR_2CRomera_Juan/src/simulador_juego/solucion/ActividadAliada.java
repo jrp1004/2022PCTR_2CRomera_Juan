@@ -20,6 +20,7 @@ public class ActividadAliada implements Runnable {
 		boolean enemigoEliminado=false;
 		
 		while(!enemigoEliminado) {
+			//Generamos un booleano aleatorio. Si es verdadero eliminamos al enemigo si no dormimos el hilo un tiempo aleatorio
 			if(generadorAleatorios.nextBoolean()) {
 				juego.eliminarEnemigo(tipoEnemigo);
 				enemigoEliminado=true;
@@ -32,6 +33,7 @@ public class ActividadAliada implements Runnable {
 				}
 			}
 		}
+		//Una vez elimina un enemigo del tipo indicado el hilo termina
 		return;
 	}
 

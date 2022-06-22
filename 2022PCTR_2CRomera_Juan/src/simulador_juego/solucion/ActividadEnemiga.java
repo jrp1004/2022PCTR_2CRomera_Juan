@@ -2,6 +2,8 @@ package simulador_juego.solucion;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ActividadEnemiga implements Runnable {
 	
@@ -23,6 +25,7 @@ public class ActividadEnemiga implements Runnable {
 				TimeUnit.MILLISECONDS.sleep(generadorAleatorios.nextInt(5000));
 			}catch(InterruptedException e) {
 				//Una vez el hilo es interrumpido termina
+				//Logger.getGlobal().log(Level.INFO, "Enemigo eliminado");
 				return;
 			}
 		}

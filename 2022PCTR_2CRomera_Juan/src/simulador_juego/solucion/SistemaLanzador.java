@@ -12,6 +12,7 @@ public class SistemaLanzador {
 
 	public static void main(String[] args) {
 		Juego juego=new Juego(numEnemigosPorTipo.length, MAXENEMIGOS);
+		//Recorremos el vector que indica la cantidad de enemigos a generar creando un GeneradorEnemigos por cada tipo indicando la cantidad a generar
 		for(int i=0;i<numEnemigosPorTipo.length;i++) {
 			new Thread(new GeneradorEnemigos(i, numEnemigosPorTipo[i], juego)).start();
 		}
