@@ -10,7 +10,7 @@ public class ActividadEnemiga implements Runnable {
 	
 	private static Random generadorAleatorios=new Random();
 	
-	public ActividadEnemiga() {
+	public ActividadEnemiga(int tipoEnemigo, IJuego juego) {
 		this.tipoEnemigo=tipoEnemigo;
 		this.juego=juego;
 	}

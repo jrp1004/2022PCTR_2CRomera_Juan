@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Juego implements IJuego{
 	
@@ -32,7 +34,35 @@ public class Juego implements IJuego{
 
 	@Override
 	public synchronized void generarEnemigo(int tipoEnemigo) {
-		
+		boolean enemigoGenerado=false;
+		while(!enemigoGenerado) {
+			try {
+				comprobarAntesDeGenerar(tipoEnemigo);
+				Integer cont=contadoresEnemigosTipo.get(tipoEnemigo);
+				cont++;
+				contadoresEnemigosTipo.put(tipoEnemigo, cont);
+				contadorEnemigosTotales++;
+				
+				//Generamos el hilo enemigo y su correspondiente hilo aliado
+				Thread temp=new Thread(new ActividadEnemiga(tipoEnemigo, this));
+				enemigos.get(tipoEnemigo).add(temp);
+				temp.start();
+				new Thread(new ActividadAliada(tipoEnemigo, this)).start();
+				enemigoGenerado=true;
+			}catch(AssertionError e) {
+				try {
+					//Si no cumplimos la precondicion o se ha llegado al limite de enemigos simultaneos esperamos para generar
+					//Logger.getGlobal().log(Level.INFO, "Esperando para generar "+tipoEnemigo);
+					wait();
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+		imprimirInfo(tipoEnemigo, "Generado");
+		checkInvariante();
+		//Despues de generar el enemigo sacamos a todos los hilos del conjunto de espera, que volveran a comprobar si pueden generar un enemigo
+		notifyAll();
 	}
 
 	@Override
@@ -54,6 +84,8 @@ public class Juego implements IJuego{
 		imprimirInfo(tipoEnemigo, "Eliminar");
 		
 		checkInvariante();
+		//Despues de eliminar un enemigo notificamos a los hilos por si hay alguno en espera por haber llegado al limite de enemigos simultaneos
+		notifyAll();
 	}
 	
 	public void imprimirInfo(int tipo, String accion) {
